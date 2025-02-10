@@ -1,11 +1,16 @@
 "use client";
 
 import Input from "@/components/UI/Input";
+import { useAuth } from "@/context/authContext";
 import { IUser } from "@/types/user";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 
 export default function Login() {
+    const { isLoggedIn, setIsLoggedIn } = useAuth();
+    const router = useRouter();
+
     const [user, setUser] = useState<IUser>({
         username: "",
         password: ""
@@ -28,17 +33,21 @@ export default function Login() {
             })
         })
             .then(res => res.json())
-            .then(json => console.log(json))
+            .then(json => {
+                setIsLoggedIn(true);
+                router.replace('/');
+
+            })
             .catch(error => console.log('Error:', error))
     }
 
     return (
         <main className="h-screen flex justify-center items-center">
             <section className="flex flex-col gap-y-5 shadow-lg bg-white p-12 border border-gray-200 rounded-lg w-xl">
-                <Input type="text" onChange={handleChange} value={user.username}>
+                <Input type="text" name="username" onChange={handleChange} value={user.username}>
                     Username
                 </Input>
-                <Input type="password" onChange={handleChange} value={user.password}>
+                <Input type="password" name="password" onChange={handleChange} value={user.password}>
                     Password
                 </Input>
                 <button onClick={handleSubmit} type="submit"
