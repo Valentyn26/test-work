@@ -1,5 +1,6 @@
 "use client";
 
+import Input from "@/components/UI/Input";
 import { IUser } from "@/types/user";
 import { useState } from "react";
 
@@ -34,18 +35,12 @@ export default function Login() {
     return (
         <main className="h-screen flex justify-center items-center">
             <section className="flex flex-col gap-y-5 shadow-lg bg-white p-12 border border-gray-200 rounded-lg w-xl">
-                <label className="flex flex-col">
+                <Input type="text" onChange={handleChange} value={user.username}>
                     Username
-                    <input onChange={handleChange} type="text" name="username" value={user.username}
-                        className="border border-gray- px-3 py-2 rounded-lg focus:outline-none focus:border-gray-500"
-                    />
-                </label>
-                <label className="flex flex-col">
+                </Input>
+                <Input type="password" onChange={handleChange} value={user.password}>
                     Password
-                    <input onChange={handleChange} type="password" name="password" value={user.password}
-                        className="border border-gray- px-3 py-2 rounded-lg focus:outline-none focus:border-gray-500"
-                    />
-                </label>
+                </Input>
                 <button onClick={handleSubmit} type="submit"
                     className="self-center border border-gray- px-3 py-2 rounded-lg w-[150px] bg-blue-400"
                 >

@@ -68,7 +68,8 @@ export const selectAllProducts = (state: RootState) => state.products.products;
 export const selectFilteredProducts = (state: RootState) => {
     const { products, filter } = state.products;
     if (!filter) return products;
+    console.log(filter);
     return products.filter((product: Product) =>
-        product.category.toLowerCase().includes(filter.toLowerCase())
+        product.title.toLowerCase().includes(filter.toLowerCase())
     );
 };
