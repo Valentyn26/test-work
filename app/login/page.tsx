@@ -8,7 +8,7 @@ import { useState } from "react";
 
 
 export default function Login() {
-    const { isLoggedIn, setIsLoggedIn } = useAuth();
+    const { setIsLoggedIn } = useAuth();
     const router = useRouter();
 
     const [user, setUser] = useState<IUser>({
@@ -33,7 +33,7 @@ export default function Login() {
             })
         })
             .then(res => res.json())
-            .then(json => {
+            .then(() => {
                 setIsLoggedIn(true);
                 router.replace('/');
 

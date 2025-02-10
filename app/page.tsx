@@ -1,13 +1,12 @@
 "use client";
 import ProductCard from "@/components/ProductCard";
-import { AuthContext, useAuth } from "@/context/authContext";
+import { useAuth } from "@/context/authContext";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { fetchProducts, Filter, filterProducts, selectFilteredProducts } from "@/store/ProductSlice";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Home() {
-
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectFilteredProducts);
   const status = useAppSelector(state => state.products.status);
@@ -66,8 +65,8 @@ export default function Home() {
     setFilter(prev => ({ ...prev, rate: Number(e.target.value) }));
   }
 
-  let pageCount = Math.ceil(products.length / 10);
-  let pagesArr: number[] = [];
+  const pageCount = Math.ceil(products.length / 10);
+  const pagesArr: number[] = [];
   for (let i = 0; i < pageCount; i++) {
     pagesArr.push(i + 1);
   }
