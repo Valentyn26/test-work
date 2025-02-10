@@ -8,20 +8,42 @@ export interface Product {
     description: string;
     category: string;
     image: string;
+    rating: {
+        rate: number;
+        count: number;
+    }
+}
+
+export interface Filter {
+    text: string;
+    categories: string[];
+    price: {
+        from: string;
+        to: string;
+    };
+    rate: number;
 }
 
 interface ProductsState {
     products: Product[];
     status: 'idle' | 'pending' | 'succeeded' | 'failed';
     error: string | null;
-    filter: string;
+    filter: Filter;
 }
 
 const initialState: ProductsState = {
     products: [],
     status: 'idle',
     error: null,
-    filter: ''
+    filter: {
+        text: "",
+        categories: [],
+        price: {
+            from: '',
+            to: '',
+        },
+        rate: 0
+    }
 };
 
 export const fetchProducts = createAsyncThunk<Product[]>(
@@ -40,7 +62,7 @@ const productsSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
-        productFilterChanged(state, action: PayloadAction<string>) {
+        filterProducts(state, action: PayloadAction<Filter>) {
             state.filter = action.payload;
         }
     },
@@ -60,16 +82,18 @@ const productsSlice = createSlice({
     }
 });
 
-export const { productFilterChanged } = productsSlice.actions;
+export const { filterProducts } = productsSlice.actions;
 export default productsSlice.reducer;
 
 export const selectAllProducts = (state: RootState) => state.products.products;
 
 export const selectFilteredProducts = (state: RootState) => {
     const { products, filter } = state.products;
-    if (!filter) return products;
-    console.log(filter);
     return products.filter((product: Product) =>
-        product.title.toLowerCase().includes(filter.toLowerCase())
+        product.title.toLowerCase().includes(filter.text.toLowerCase()) &&
+        (filter.categories.length === 0 || filter.categories.includes(product.category)) &&
+        (filter.price.from === '' || product.price >= +filter.price.from) &&
+        (filter.price.to === '' || product.price <= +filter.price.to) &&
+        product.rating.rate >= filter.rate
     );
 };
